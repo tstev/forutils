@@ -1,0 +1,25 @@
+# EditorConfig file. For more info, please see:
+# https://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+[*]
+#trim_trailing_whitespace = true
+#insert_final_newline = true
+charset = utf-8
+max_line_length = 132
+end_of_line = lf
+
+[*.{f90,F90}]
+indent_style = space
+indent_size = 2
+
+[*.md]
+max_line_length = off
+trim_trailing_whitespace = false
+
+# Tab indentation (no size specified)
+[Makefile]
+indent_style = tab
+indent_size = 4
