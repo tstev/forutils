@@ -10,7 +10,7 @@ module utils
   interface reverse
     module procedure reverse_i1, reverse_i2, reverse_i4, reverse_i8
     module procedure reverse_r4, reverse_r8, reverse_r16
-    module procedure str_rev, reverse_char
+    module procedure str_rev
   end interface reverse
 
   !> Determines is an interger is a prime number
@@ -70,13 +70,6 @@ contains
 
     rev = x(size(x):1:-1)
   end function reverse_r16
-
-  pure function reverse_char(x) result(rev)
-    character(*), intent(in) :: x(:)
-    character(len(x))        :: rev(size(x))
-
-    rev = x(size(x):1:-1)
-  end function reverse_char
 
   ! IS_EVEN --------------------------------------------------------------------
   pure elemental function is_even_i1(x) result(even)
