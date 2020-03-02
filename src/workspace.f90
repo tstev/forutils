@@ -6,12 +6,13 @@ module workspace
   use, intrinsic :: iso_fortran_env, only: FILE_STORAGE_SIZE
 
   ! Frequently used datatypes and the working precision desired
-  use, intrinsic :: iso_fortran_env, only: i1 => INT8
-  use, intrinsic :: iso_fortran_env, only: i2 => INT16
-  use, intrinsic :: iso_fortran_env, only: i4 => INT32
-  use, intrinsic :: iso_fortran_env, only: i8 => INT64
-  use, intrinsic :: iso_fortran_env, only: sp => REAL32
-  use, intrinsic :: iso_fortran_env, only: dp => REAL64
+  use, intrinsic :: iso_fortran_env, only: i1 => int8
+  use, intrinsic :: iso_fortran_env, only: i2 => int16
+  use, intrinsic :: iso_fortran_env, only: i4 => int32
+  use, intrinsic :: iso_fortran_env, only: i8 => int64
+  use, intrinsic :: iso_fortran_env, only: r4 => real32
+  use, intrinsic :: iso_fortran_env, only: r8 => real64
+  use, intrinsic :: iso_fortran_env, only: r16 => real128
 #if (_DP==0)
   use, intrinsic :: iso_fortran_env, only: wp => REAL32
 #else
