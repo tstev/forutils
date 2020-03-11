@@ -1,15 +1,13 @@
 module stats
-  use workspace, only: sp, dp
+  use workspace, only: r4, r8, r16
   implicit none
 
   interface mean
-    module procedure mean_sp
-    module procedure mean_dp
+    module procedure mean_r4, mean_r8, mean_r16
   end interface mean
 
   interface var
-    module procedure var_sp
-    module procedure var_dp
+    module procedure var_r4, var_r8, var_r16
   end interface var
 
   private
@@ -17,29 +15,56 @@ module stats
 
 contains
   ! COMPUTE THE AVERAGE --------------------------
-  pure function mean_sp(x) result(avg)
-    real(sp), intent(in) :: x(:)
-    real(sp)             :: avg
+  pure function mean_r4(x, mask) result(avg)
+    real(r4), intent(in)          :: x(:)
+    logical, intent(in), optional :: mask(size(x))
+    real(r4)                      :: avg
+    integer                       :: i, n
 
-    avg = sum(x)/max(1.0_sp, real(size(x), sp))
-  end function mean_sp
+    ! Initialize
+    avg = 0.0_r4
+    n = size(x)
 
-  pure function mean_dp(x) result(avg)
-    real(dp), intent(in) :: x(:)
-    real(dp)             :: avg
+    ! Early return
+    if (n.le.1) then
+      avg = x(n)
+      return
+    end if
 
-    avg = sum(x)/max(1.0_dp, real(size(x), dp))
-  end function mean_dp
+    ! Sum for masked elements if present
+    do i = 1, n
+      if (present(mask(i))) then
+        if (.not.mask(i)) cycle
+      end if
+      avg = avg + x(i)
+    end do
+
+    avg = avg/real(n, r4)
+  end function mean_r4
+
+  pure function mean_r8(x) result(avg)
+    real(r8), intent(in) :: x(:)
+    real(r8)             :: avg
+
+    avg = sum(x)/max(1.0_r8, real(size(x), r8))
+  end function mean_r8
+
+  pure function mean_r16(x) result(avg)
+    real(r16), intent(in) :: x(:)
+    real(r16)             :: avg
+
+    avg = sum(x)/max(1.0_r16, real(size(x), r16))
+  end function mean_r16
 
   ! COMPUTE VARIANCE -------------------------------
-  pure function var_sp(x, sample) result(var)
-    real(sp), intent(in)          :: x(:)
-    real(sp)                      :: var
+  pure function var_r4(x, sample) result(var)
+    real(r4), intent(in)          :: x(:)
+    real(r4)                      :: var
     logical, intent(in), optional :: sample
     logical                       :: sample_arg
 
     ! Initialize
-    var = 0.0_sp
+    var = 0.0_r4
     sample_arg = .true.
     if (present(sample)) sample_arg = sample
 
@@ -53,16 +78,16 @@ contains
     else
       var = var/size(x)
     end if
-  end function var_sp
+  end function var_r4
 
-  pure function var_dp(x, sample) result(var)
-    real(dp), intent(in)          :: x(:)
-    real(dp)                      :: var
+  pure function var_r8(x, sample) result(var)
+    real(r8), intent(in)          :: x(:)
+    real(r8)                      :: var
     logical, intent(in), optional :: sample
     logical                       :: sample_arg
 
     ! Initialize
-    var = 0.0_dp
+    var = 0.0_r8
     sample_arg = .true.
     if (present(sample)) sample_arg = sample
 
@@ -76,6 +101,6 @@ contains
     else
       var = var/size(x)
     end if
-  end function var_dp
+  end function var_r8
 
 end module stats
