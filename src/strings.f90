@@ -8,6 +8,9 @@ module strings
 
   implicit none
 
+  character(len = 26), parameter :: lower = "abcdefghijklmnopqrstuvwxyz"
+  character(len = 26), parameter :: upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
   !> @brief convert numeric data into strings
   interface to_str
     module procedure to_str_i1, to_str_i2, to_str_i4, to_str_i8
@@ -20,10 +23,61 @@ module strings
   end interface str_rev
 
   private
-  public  :: str_rev, to_str
+  public  :: str_rev, to_str,
+  public :: is_upper, is_lower, is_blank
 
 contains
+  !> @brief checks for space of tab character
+  ! Source: https://github.com/fortran-lang/stdlib
+  pure function is_blank(ch) result(blank)
+     character(len = 1), intent(in) :: ch
+     integer                        :: ich
+     logical                        :: blank
 
+     ich = iachar(ch)             ! TAB
+     blank = (ch == ' ') .or. (ich == z'09');
+  end function
+
+  ! STRING CASE FUNCTIONS ------------------------------------------------------
+  pure elemental function is_upper_char(ch) result(ans)
+    character(len = 1), intent(in) :: ch
+    logical                        :: ans
+
+    ans = .false.
+    ans = index(upper, ch).gt.0
+  end function is_upper_char
+
+  pure elemental function is_upper(str) result(ans)
+    character(len = *), intent(in) :: str
+    logical                        :: ans
+    integer                        :: i
+
+    ans = .false.
+    do i = 1, len_trim(str)
+      ans = is_upper_char(str(i:i))
+      if (.not.ans) return
+    end do
+  end function is_upper
+
+  pure elemental function is_lower_char(ch) result(ans)
+    character(len = 1), intent(in) :: ch
+    logical                        :: ans
+
+    ans = .false.
+    ans = index(lower, ch).gt.0
+  end function is_lower_char
+
+  pure elemental function is_lower(str) result(ans)
+    character(len = *), intent(in) :: str
+    logical                        :: ans
+    integer                        :: i
+
+    ans = .false.
+    do i = 1, len_trim(str)
+      ans = is_upper_char(str(i:i))
+      if (.not.ans) return
+    end do
+  end function is_lower
 
   ! CONVERT NUMBET TO STRING ---------------------------------------------------
   pure function to_str_i1(val, fmt) result(str)
