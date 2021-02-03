@@ -19,6 +19,10 @@ module utils
     module procedure is_even_i1, is_even_i2, is_even_i4, is_even_i8
   end interface is_even
 
+  interface is_odd
+    module procedure is_odd_i1, is_odd_i2, is_odd_i4, is_odd_i8
+  end interface is_odd
+
 contains
 
   ! REVERSE --------------------------------------------------------------------
@@ -99,4 +103,34 @@ contains
 
     even = iand(x, 1_i8).eq.0_i8
   end function is_even_i8
+
+  ! IS_ODD --------------------------------------------------------------------
+  pure elemental function is_odd_i1(x) result(odd)
+    integer(i1), intent(in) :: x
+    logical                 :: odd
+
+    odd = .not.is_even(x)
+  end function is_odd_i1
+
+  pure elemental function is_odd_i2(x) result(odd)
+    integer(i2), intent(in) :: x
+    logical                 :: odd
+
+    odd = .not.is_even(x)
+  end function is_odd_i2
+
+  pure elemental function is_odd_i4(x) result(odd)
+    integer(i4), intent(in) :: x
+    logical                 :: odd
+
+    odd = .not.is_even(x)
+  end function is_odd_i4
+
+  pure elemental function is_odd_i8(x) result(odd)
+    integer(i8), intent(in) :: x
+    logical                 :: odd
+
+    odd = .not.is_even(x)
+  end function is_odd_i8
+
 end module utils
