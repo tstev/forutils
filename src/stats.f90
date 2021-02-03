@@ -42,18 +42,58 @@ contains
     avg = avg/real(n, r4)
   end function mean_r4
 
-  pure function mean_r8(x) result(avg)
-    real(r8), intent(in) :: x(:)
-    real(r8)             :: avg
+  pure function mean_r8(x, mask) result(avg)
+    real(r8), intent(in)          :: x(:)
+    logical, intent(in), optional :: mask(size(x))
+    real(r8)                      :: avg
+    integer                       :: i, n
 
-    avg = sum(x)/max(1.0_r8, real(size(x), r8))
+    ! Initialize
+    avg = 0.0_r8
+    n = size(x)
+
+    ! Early return
+    if (n.le.1) then
+      avg = x(n)
+      return
+    end if
+
+    ! Sum for masked elements if present
+    do i = 1, n
+      if (present(mask(i))) then
+        if (.not.mask(i)) cycle
+      end if
+      avg = avg + x(i)
+    end do
+
+    avg = avg/real(n, r8)
   end function mean_r8
 
-  pure function mean_r16(x) result(avg)
-    real(r16), intent(in) :: x(:)
-    real(r16)             :: avg
+  pure function mean_r16(x, mask) result(avg)
+    real(r16), intent(in)         :: x(:)
+    logical, intent(in), optional :: mask(size(x))
+    real(r16)                     :: avg
+    integer                       :: i, n
 
-    avg = sum(x)/max(1.0_r16, real(size(x), r16))
+    ! Initialize
+    avg = 0.0_r16
+    n = size(x)
+
+    ! Early return
+    if (n.le.1) then
+      avg = x(n)
+      return
+    end if
+
+    ! Sum for masked elements if present
+    do i = 1, n
+      if (present(mask(i))) then
+        if (.not.mask(i)) cycle
+      end if
+      avg = avg + x(i)
+    end do
+
+    avg = avg/real(n, r16)
   end function mean_r16
 
   ! COMPUTE VARIANCE -------------------------------
