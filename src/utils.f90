@@ -1,136 +1,146 @@
 module utils
-  use workspace, only: i1, i2, i4, i8, r4, r8, r16
+  use workspace, only: int8, int16, int32, int64
+  use workspace, only: real32, real64, real128
+
   use strings, only: str_rev
 
   implicit none
 
   private
-  public :: is_even, reverse
+  public :: is_even, is_odd, reverse
 
   interface reverse
-    module procedure reverse_i1, reverse_i2, reverse_i4, reverse_i8
-    module procedure reverse_r4, reverse_r8, reverse_r16
-    module procedure str_rev
+    module procedure reverse_int8, reverse_int16, reverse_int32, reverse_int64
+    module procedure reverse_real32, reverse_real64, reverse_real128
+    module procedure reverse_char
   end interface reverse
 
-  !> Determines is an interger is a prime number
+  !> Determines if integer number is even
   !! https://stackoverflow.com/a/25244680
   interface is_even
-    module procedure is_even_i1, is_even_i2, is_even_i4, is_even_i8
+    module procedure is_even_int8, is_even_int16, is_even_int32, is_even_int64
   end interface is_even
 
   interface is_odd
-    module procedure is_odd_i1, is_odd_i2, is_odd_i4, is_odd_i8
+    module procedure is_odd_int8, is_odd_int16, is_odd_int32, is_odd_int64
   end interface is_odd
 
 contains
 
   ! REVERSE --------------------------------------------------------------------
-  pure function reverse_i1(x) result(rev)
-    integer(i1), intent(in) :: x(:)
-    integer(i1)             :: rev(size(x))
+  pure function reverse_int8(x) result(rev)
+    integer(int8), intent(in) :: x(:)
+    integer(int8)             :: rev(size(x))
 
     rev = x(size(x):1:-1)
-  end function reverse_i1
+  end function reverse_int8
 
-  pure function reverse_i2(x) result(rev)
-    integer(i2), intent(in) :: x(:)
-    integer(i2)             :: rev(size(x))
-
-    rev = x(size(x):1:-1)
-  end function reverse_i2
-
-  pure function reverse_i4(x) result(rev)
-    integer(i4), intent(in) :: x(:)
-    integer(i4)             :: rev(size(x))
+  pure function reverse_int16(x) result(rev)
+    integer(int16), intent(in) :: x(:)
+    integer(int16)             :: rev(size(x))
 
     rev = x(size(x):1:-1)
-  end function reverse_i4
+  end function reverse_int16
 
-  pure function reverse_i8(x) result(rev)
-    integer(i8), intent(in) :: x(:)
-    integer(i8)             :: rev(size(x))
-
-    rev = x(size(x):1:-1)
-  end function reverse_i8
-
-  pure function reverse_r4(x) result(rev)
-    real(r4), intent(in) :: x(:)
-    real(r4)             :: rev(size(x))
+  pure function reverse_int32(x) result(rev)
+    integer(int32), intent(in) :: x(:)
+    integer(int32)             :: rev(size(x))
 
     rev = x(size(x):1:-1)
-  end function reverse_r4
+  end function reverse_int32
 
-  pure function reverse_r8(x) result(rev)
-    real(r8), intent(in) :: x(:)
-    real(r8)             :: rev(size(x))
-
-    rev = x(size(x):1:-1)
-  end function reverse_r8
-
-  pure function reverse_r16(x) result(rev)
-    integer(r16), intent(in) :: x(:)
-    integer(r16)             :: rev(size(x))
+  pure function reverse_int64(x) result(rev)
+    integer(int64), intent(in) :: x(:)
+    integer(int64)             :: rev(size(x))
 
     rev = x(size(x):1:-1)
-  end function reverse_r16
+  end function reverse_int64
+
+  pure function reverse_real32(x) result(rev)
+    real(real32), intent(in) :: x(:)
+    real(real32)             :: rev(size(x))
+
+    rev = x(size(x):1:-1)
+  end function reverse_real32
+
+  pure function reverse_real64(x) result(rev)
+    real(real64), intent(in) :: x(:)
+    real(real64)             :: rev(size(x))
+
+    rev = x(size(x):1:-1)
+  end function reverse_real64
+
+  pure function reverse_real128(x) result(rev)
+    integer(real128), intent(in) :: x(:)
+    integer(real128)             :: rev(size(x))
+
+    rev = x(size(x):1:-1)
+  end function reverse_real128
+
+  pure function reverse_char(x) result(rev)
+    character(len = *), intent(in) :: x(:)
+    character(len = len(x))        :: rev(size(x))
+
+    rev = x(size(x):1:-1)
+  end function reverse_char
+
 
   ! IS_EVEN --------------------------------------------------------------------
-  pure elemental function is_even_i1(x) result(even)
-    integer(i1), intent(in) :: x
-    logical                 :: even
+  pure elemental function is_even_int8(x) result(even)
+    integer(int8), intent(in) :: x
+    logical                   :: even
 
-    even = iand(x, 1_i1).eq.0_i1
-  end function is_even_i1
+    even = iand(x, 1_int8).eq.0_int8
+  end function is_even_int8
 
-  pure elemental function is_even_i2(x) result(even)
-    integer(i2), intent(in) :: x
-    logical                 :: even
+  pure elemental function is_even_int16(x) result(even)
+    integer(int16), intent(in) :: x
+    logical                    :: even
 
-    even = iand(x, 1_i2).eq.0_i2
-  end function is_even_i2
+    even = iand(x, 1_int16).eq.0_int16
+  end function is_even_int16
 
-  pure elemental function is_even_i4(x) result(even)
-    integer(i4), intent(in) :: x
-    logical                 :: even
+  pure elemental function is_even_int32(x) result(even)
+    integer(int32), intent(in) :: x
+    logical                    :: even
 
-    even = iand(x, 1_i4).eq.0_i4
-  end function is_even_i4
+    even = iand(x, 1_int32).eq.0_int32
+  end function is_even_int32
 
-  pure elemental function is_even_i8(x) result(even)
-    integer(i8), intent(in) :: x
-    logical                 :: even
+  pure elemental function is_even_int64(x) result(even)
+    integer(int64), intent(in) :: x
+    logical                    :: even
 
-    even = iand(x, 1_i8).eq.0_i8
-  end function is_even_i8
+    even = iand(x, 1_int64).eq.0_int64
+  end function is_even_int64
 
   ! IS_ODD --------------------------------------------------------------------
-  pure elemental function is_odd_i1(x) result(odd)
-    integer(i1), intent(in) :: x
-    logical                 :: odd
+  pure elemental function is_odd_int8(x) result(odd)
+    integer(int8), intent(in) :: x
+    logical                   :: odd
 
     odd = .not.is_even(x)
-  end function is_odd_i1
+  end function is_odd_int8
 
-  pure elemental function is_odd_i2(x) result(odd)
-    integer(i2), intent(in) :: x
-    logical                 :: odd
-
-    odd = .not.is_even(x)
-  end function is_odd_i2
-
-  pure elemental function is_odd_i4(x) result(odd)
-    integer(i4), intent(in) :: x
-    logical                 :: odd
+  pure elemental function is_odd_int16(x) result(odd)
+    integer(int16), intent(in) :: x
+    logical                    :: odd
 
     odd = .not.is_even(x)
-  end function is_odd_i4
+  end function is_odd_int16
 
-  pure elemental function is_odd_i8(x) result(odd)
-    integer(i8), intent(in) :: x
-    logical                 :: odd
+  pure elemental function is_odd_int32(x) result(odd)
+    integer(int32), intent(in) :: x
+    logical                    :: odd
 
     odd = .not.is_even(x)
-  end function is_odd_i8
+  end function is_odd_int32
+
+  pure elemental function is_odd_int64(x) result(odd)
+    integer(int64), intent(in) :: x
+    logical                    :: odd
+
+    odd = .not.is_even(x)
+  end function is_odd_int64
 
 end module utils

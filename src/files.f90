@@ -1,6 +1,6 @@
 module files
   use workspace, only: stderr, eof, eol
-  use workspace, only: FILE_STORAGE_SIZE, i8
+  use workspace, only: FILE_STORAGE_SIZE, int64
   use workspace, only: MAX_CHAR_LEN
   use strings,   only: is_blank
 
@@ -91,7 +91,7 @@ contains
   ! FILE SIZE ------------------------------------------------------------------
   function file_size_int(file_unit) result(fsize)
     integer, intent(in) :: file_unit
-    integer(i8)         :: fsize
+    integer(int64)      :: fsize
     integer             :: io
 
     ! Determine total file size
@@ -108,7 +108,7 @@ contains
 
   function file_size_chr(file_name) result(fsize)
     character(len = *), intent(in) :: file_name
-    integer(i8)                    :: fsize
+    integer(int64)                 :: fsize
     integer                        :: u_file
 
     ! Open file
@@ -147,7 +147,7 @@ contains
     character(len = *), intent(in) :: file_name
     integer                        :: rec_len, u_file
 
-    rec_line = 0
+    rec_len = 0
 
     ! Open file
     u_file = file_open(file_name, status = 'old', action = 'read')
@@ -184,7 +184,7 @@ contains
   ! FILE NUMBER OF RECORDS -----------------------------------------------------
   function file_nrec_int(u_file) result(nrec)
     integer, intent(in) :: u_file
-    integer(i8)         :: fsize, nrec
+    integer(int64)      :: fsize, nrec
     integer             :: rec_size, io
 
     ! Get file size and record length in bytes
@@ -196,7 +196,7 @@ contains
     if ((fsize.eq.0).or.(rec_size.eq.0)) return
 
     ! If file size method fails use backup method
-    if (modulo(fsize, int(rec_size, i8)).ne.0) then
+    if (modulo(fsize, int(rec_size, int64)).ne.0) then
       rewind(u_file)
       do
         ! Loop through records without reading saving anything into memory
@@ -217,7 +217,7 @@ contains
 
   function file_nrec_chr(file_name) result(nrec)
     character(len = *), intent(in) :: file_name
-    integer(i8)                    :: nrec
+    integer(int64)                 :: nrec
     integer                        :: u_file
 
     nrec = 0

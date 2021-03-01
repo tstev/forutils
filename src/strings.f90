@@ -3,27 +3,22 @@ module strings
   use workspace, only: MAX_CHAR_LEN
 
   ! Date types
-  use workspace, only: r4, r8
-  use workspace, only: i1, i2, i4, i8
+  use workspace, only: real32, real64
+  use workspace, only: int8, int16, int32, int64
 
   implicit none
 
   character(len = 26), parameter :: lower = "abcdefghijklmnopqrstuvwxyz"
   character(len = 26), parameter :: upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-  !> @brief convert numeric data into strings
+  ! Convert numeric data into strings
   interface to_str
-    module procedure to_str_i1, to_str_i2, to_str_i4, to_str_i8
-    module procedure to_str_r4, to_str_r8
+    module procedure to_str_int8, to_str_int16, to_str_int32, to_str_int64
+    module procedure to_str_real32, to_str_real64
   end interface to_str
 
-  !> @brief reverse a string or character array
-  interface str_rev
-    module procedure str_rev_str, str_rev_char
-  end interface str_rev
-
   private
-  public  :: str_rev, to_str,
+  public :: str_rev, to_str
   public :: is_upper, is_lower, is_blank
 
 contains
@@ -74,14 +69,14 @@ contains
 
     ans = .false.
     do i = 1, len_trim(str)
-      ans = is_upper_char(str(i:i))
+      ans = is_lower_char(str(i:i))
       if (.not.ans) return
     end do
   end function is_lower
 
   ! CONVERT NUMBET TO STRING ---------------------------------------------------
-  pure function to_str_i1(val, fmt) result(str)
-    integer(i1), intent(in)                  :: val
+  pure function to_str_int8(val, fmt) result(str)
+    integer(int8), intent(in)                :: val
     character(len = *), intent(in), optional :: fmt
     character(len = MAX_CHAR_LEN)            :: tmp
     character(len = :), allocatable          :: str
@@ -93,10 +88,10 @@ contains
     end if
 
     str = trim(tmp)
-  end function to_str_i1
+  end function to_str_int8
 
-  pure function to_str_i2(val, fmt) result(str)
-    integer(i2), intent(in)                  :: val
+  pure function to_str_int16(val, fmt) result(str)
+    integer(int16), intent(in)               :: val
     character(len = *), intent(in), optional :: fmt
     character(len = MAX_CHAR_LEN)            :: tmp
     character(len = :), allocatable          :: str
@@ -108,10 +103,10 @@ contains
     end if
 
     str = trim(tmp)
-  end function to_str_i2
+  end function to_str_int16
 
-  pure function to_str_i4(val, fmt) result(str)
-    integer(i4), intent(in)                  :: val
+  pure function to_str_int32(val, fmt) result(str)
+    integer(int32), intent(in)               :: val
     character(len = *), intent(in), optional :: fmt
     character(len = MAX_CHAR_LEN)            :: tmp
     character(len = :), allocatable          :: str
@@ -123,10 +118,10 @@ contains
     end if
 
     str = trim(tmp)
-  end function to_str_i4
+  end function to_str_int32
 
-  pure function to_str_i8(val, fmt) result(str)
-    integer(i8), intent(in)                  :: val
+  pure function to_str_int64(val, fmt) result(str)
+    integer(int64), intent(in)               :: val
     character(len = *), intent(in), optional :: fmt
     character(len = MAX_CHAR_LEN)            :: tmp
     character(len = :), allocatable          :: str
@@ -138,10 +133,10 @@ contains
     end if
 
     str = trim(tmp)
-  end function to_str_i8
+  end function to_str_int64
 
-  pure function to_str_r4(val, fmt) result(str)
-    real(r4), intent(in)                     :: val
+  pure function to_str_real32(val, fmt) result(str)
+    real(real32), intent(in)                 :: val
     character(len = *), intent(in), optional :: fmt
     character(len = MAX_CHAR_LEN)            :: tmp
     character(len = :), allocatable          :: str
@@ -153,10 +148,10 @@ contains
     end if
 
     str = trim(tmp)
-  end function to_str_r4
+  end function to_str_real32
 
-  pure function to_str_r8(val, fmt) result(str)
-    real(r8), intent(in)                     :: val
+  pure function to_str_real64(val, fmt) result(str)
+    real(real64), intent(in)                 :: val
     character(len = *), intent(in), optional :: fmt
     character(len = MAX_CHAR_LEN)            :: tmp
     character(len = :), allocatable          :: str
@@ -168,10 +163,10 @@ contains
     end if
 
     str = trim(tmp)
-  end function to_str_r8
+  end function to_str_real64
 
   ! REVERSE STRING -------------------------------------------------------------
-  pure function str_rev_str(val) result(str)
+  pure elemental function str_rev(val) result(str)
     character(len = *), intent(in) :: val
     character(len = len(val))      :: str
     integer                        :: i, len_val
@@ -180,13 +175,6 @@ contains
     do i = 1, len_val
       str(len_val-i+1:len_val-i+1) = val(i:i)
     end do
-  end function str_rev_str
-
-  pure function str_rev_char(x) result(rev)
-    character(len = *), intent(in) :: x(:)
-    character(len = len(x))        :: rev(size(x))
-
-    rev = x(size(x):1:-1)
-  end function str_rev_char
+  end function str_rev
 
 end module strings
